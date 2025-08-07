@@ -4,7 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ماشین حساب اشکال هندسی</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="description" content="محاسبه محیط و مساحت اشکال هندسی با طراحی مدرن">
+    <meta name="theme-color" content="#64b5f6">
+    
+    <!-- Manifest for PWA -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Icons for different devices -->
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
+    
+    <!-- Splash screen for mobile -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="ماشین حساب اشکال">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
     <style>
         * {
             margin: 0;
@@ -330,7 +346,7 @@
         }
 
         .theme-toggle {
-            position: absolute;
+            position: fixed;
             top: 20px;
             right: 20px;
             background: rgba(255, 255, 255, 0.3);
@@ -342,15 +358,15 @@
             align-items: center;
             cursor: pointer;
             border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
-            z-index: 10;
+            z-index: 1000;
         }
 
         body.dark-theme .theme-toggle {
             background: rgba(50, 50, 50, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .theme-toggle:hover {
@@ -428,6 +444,17 @@
             .result-value {
                 font-size: 1.2rem;
             }
+            
+            .theme-toggle {
+                width: 45px;
+                height: 45px;
+                top: 15px;
+                right: 15px;
+            }
+            
+            .theme-toggle i {
+                font-size: 1.3rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -437,17 +464,6 @@
             
             .result-grid {
                 grid-template-columns: 1fr;
-            }
-            
-            .theme-toggle {
-                width: 40px;
-                height: 40px;
-                top: 15px;
-                right: 15px;
-            }
-            
-            .theme-toggle i {
-                font-size: 1.2rem;
             }
         }
 
@@ -531,6 +547,9 @@
         </div>
     </div>
 
+    <!-- Font Awesome for icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
     <script>
         // اشکال هندسی و فرمول‌های محاسبه
         const shapes = {
@@ -728,6 +747,19 @@
 
         // Initialize the app when the page loads
         document.addEventListener('DOMContentLoaded', initApp);
+        
+        // Register service worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
     </script>
-</body>
-</html>
+</head>
+<body>

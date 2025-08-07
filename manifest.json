@@ -1,0 +1,21 @@
+{
+  "name": "ماشین حساب اشکال هندسی",
+  "short_name": "اشکال هندسی",
+  "description": "محاسبه محیط و مساحت اشکال هندسی با طراحی مدرن",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f0f0f0",
+  "theme_color": "#64b5f6",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
