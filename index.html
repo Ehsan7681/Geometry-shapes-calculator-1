@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ماشین حساب اشکال هندسی</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            padding: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        body.dark-theme {
+            background-color: #121212;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .calculator {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-theme .calculator {
+            background: rgba(30, 30, 30, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .app-title {
+            text-align: center;
+            color: #000;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-theme .app-title {
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .app-subtitle {
+            text-align: center;
+            color: rgba(0, 0, 0, 0.7);
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        body.dark-theme .app-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .shape-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .shape-btn {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 15px;
+            padding: 15px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-theme .shape-btn {
+            background: rgba(50, 50, 50, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .shape-btn:hover {
+            background: rgba(255, 255, 255, 0.45);
+            transform: translateY(-3px);
+        }
+
+        body.dark-theme .shape-btn:hover {
+            background: rgba(70, 70, 70, 0.45);
+        }
+
+        .shape-btn.active {
+            background: rgba(100, 180, 255, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-theme .shape-btn.active {
+            background: rgba(80, 150, 220, 0.4);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .shape-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .shape-name {
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .input-section {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-theme .input-section {
+            background: rgba(50, 50, 50, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .input-title {
+            color: #000;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        body.dark-theme .input-title {
+            color: #fff;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .input-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-label {
+            color: #000;
+            font-size: 0.95rem;
+        }
+
+        body.dark-theme .input-label {
+            color: #fff;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 0 15px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        body.dark-theme .input-container {
+            background: rgba(50, 50, 50, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .input-container i {
+            color: rgba(0, 0, 0, 0.6);
+            margin-right: 10px;
+        }
+
+        body.dark-theme .input-container i {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .input-container input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 15px 0;
+            font-size: 1.1rem;
+            color: #000;
+            outline: none;
+            direction: ltr;
+        }
+
+        body.dark-theme .input-container input {
+            color: #fff;
+        }
+
+        .input-container input::placeholder {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        body.dark-theme .input-container input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 16px;
+            background: rgba(100, 180, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 15px;
+            color: #000;
+            font-size: 1.2rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+        }
+
+        body.dark-theme .calculate-btn {
+            background: rgba(80, 150, 220, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .calculate-btn:hover {
+            background: rgba(100, 180, 255, 0.55);
+            transform: translateY(-2px);
+        }
+
+        body.dark-theme .calculate-btn:hover {
+            background: rgba(80, 150, 220, 0.55);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(1px);
+        }
+
+        .result-section {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-theme .result-section {
+            background: rgba(50, 50, 50, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-title {
+            color: #000;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        body.dark-theme .result-title {
+            color: #fff;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .result-card {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        body.dark-theme .result-card {
+            background: rgba(50, 50, 50, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .result-label {
+            color: rgba(0, 0, 0, 0.7);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        body.dark-theme .result-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .result-value {
+            color: #000;
+            font-size: 1.4rem;
+            font-weight: 600;
+            direction: ltr;
+        }
+
+        body.dark-theme .result-value {
+            color: #fff;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        body.dark-theme .theme-toggle {
+            background: rgba(50, 50, 50, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.45);
+            transform: rotate(30deg);
+        }
+
+        body.dark-theme .theme-toggle:hover {
+            background: rgba(70, 70, 70, 0.45);
+        }
+
+        .theme-toggle i {
+            color: #000;
+            font-size: 1.5rem;
+        }
+
+        body.dark-theme .theme-toggle i {
+            color: #fff;
+        }
+
+        .shape-diagram {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .diagram {
+            width: 120px;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4rem;
+            color: rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-theme .diagram {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .calculator {
+                padding: 15px;
+            }
+            
+            .shape-selector {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+            
+            .shape-btn {
+                padding: 12px 5px;
+            }
+            
+            .shape-icon {
+                font-size: 1.5rem;
+                margin-bottom: 5px;
+            }
+            
+            .shape-name {
+                font-size: 0.8rem;
+            }
+            
+            .input-container input {
+                padding: 12px 0;
+                font-size: 1rem;
+            }
+            
+            .calculate-btn {
+                padding: 14px;
+                font-size: 1.1rem;
+            }
+            
+            .result-value {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .shape-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .theme-toggle {
+                width: 40px;
+                height: 40px;
+                top: 15px;
+                right: 15px;
+            }
+            
+            .theme-toggle i {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .shape-selector {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </div>
+    
+    <div class="app-container">
+        <div class="calculator">
+            <h1 class="app-title">ماشین حساب اشکال هندسی</h1>
+            <p class="app-subtitle">محاسبه محیط و مساحت اشکال مختلف</p>
+            
+            <div class="shape-selector" id="shapeSelector">
+                <div class="shape-btn active" data-shape="square">
+                    <div class="shape-icon">⬜</div>
+                    <div class="shape-name">مربع</div>
+                </div>
+                <div class="shape-btn" data-shape="rectangle">
+                    <div class="shape-icon">▭</div>
+                    <div class="shape-name">مستطیل</div>
+                </div>
+                <div class="shape-btn" data-shape="circle">
+                    <div class="shape-icon">○</div>
+                    <div class="shape-name">دایره</div>
+                </div>
+                <div class="shape-btn" data-shape="triangle">
+                    <div class="shape-icon">△</div>
+                    <div class="shape-name">مثلث</div>
+                </div>
+                <div class="shape-btn" data-shape="parallelogram">
+                    <div class="shape-icon">▱</div>
+                    <div class="shape-name">متوازی‌الأضلاع</div>
+                </div>
+                <div class="shape-btn" data-shape="trapezoid">
+                    <div class="shape-icon">⏢</div>
+                    <div class="shape-name">ذوزنقه</div>
+                </div>
+            </div>
+            
+            <div class="shape-diagram">
+                <div class="diagram" id="shapeDiagram">⬜</div>
+            </div>
+            
+            <div class="input-section">
+                <h2 class="input-title">مقادیر مورد نیاز</h2>
+                <div class="input-group" id="inputGroup">
+                    <div class="input-field">
+                        <label class="input-label">طول ضلع (سانتی‌متر)</label>
+                        <div class="input-container">
+                            <i class="fas fa-ruler"></i>
+                            <input type="number" id="sideInput" placeholder="طول ضلع را وارد کنید" min="0" step="0.01">
+                        </div>
+                    </div>
+                </div>
+                <button class="calculate-btn" id="calculateBtn">
+                    <i class="fas fa-calculator"></i> محاسبه
+                </button>
+            </div>
+            
+            <div class="result-section">
+                <h2 class="result-title">نتایج محاسبه</h2>
+                <div class="result-grid">
+                    <div class="result-card">
+                        <div class="result-label">محیط</div>
+                        <div class="result-value" id="perimeterResult">0</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-label">مساحت</div>
+                        <div class="result-value" id="areaResult">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // اشکال هندسی و فرمول‌های محاسبه
+        const shapes = {
+            square: {
+                name: "مربع",
+                icon: "⬜",
+                inputs: [
+                    { id: "side", label: "طول ضلع (سانتی‌متر)", icon: "fas fa-ruler" }
+                ],
+                calculate: (inputs) => {
+                    const side = parseFloat(inputs.side) || 0;
+                    const perimeter = 4 * side;
+                    const area = side * side;
+                    return { perimeter, area };
+                }
+            },
+            rectangle: {
+                name: "مستطیل",
+                icon: "▭",
+                inputs: [
+                    { id: "length", label: "طول (سانتی‌متر)", icon: "fas fa-arrows-alt-h" },
+                    { id: "width", label: "عرض (سانتی‌متر)", icon: "fas fa-arrows-alt-v" }
+                ],
+                calculate: (inputs) => {
+                    const length = parseFloat(inputs.length) || 0;
+                    const width = parseFloat(inputs.width) || 0;
+                    const perimeter = 2 * (length + width);
+                    const area = length * width;
+                    return { perimeter, area };
+                }
+            },
+            circle: {
+                name: "دایره",
+                icon: "○",
+                inputs: [
+                    { id: "radius", label: "شعاع (سانتی‌متر)", icon: "fas fa-circle" }
+                ],
+                calculate: (inputs) => {
+                    const radius = parseFloat(inputs.radius) || 0;
+                    const perimeter = 2 * Math.PI * radius;
+                    const area = Math.PI * radius * radius;
+                    return { perimeter, area };
+                }
+            },
+            triangle: {
+                name: "مثلث",
+                icon: "△",
+                inputs: [
+                    { id: "base", label: "قاعده (سانتی‌متر)", icon: "fas fa-ruler-horizontal" },
+                    { id: "height", label: "ارتفاع (سانتی‌متر)", icon: "fas fa-ruler-vertical" },
+                    { id: "side1", label: "ضلع اول (سانتی‌متر)", icon: "fas fa-ruler" },
+                    { id: "side2", label: "ضلع دوم (سانتی‌متر)", icon: "fas fa-ruler" }
+                ],
+                calculate: (inputs) => {
+                    const base = parseFloat(inputs.base) || 0;
+                    const height = parseFloat(inputs.height) || 0;
+                    const side1 = parseFloat(inputs.side1) || 0;
+                    const side2 = parseFloat(inputs.side2) || 0;
+                    const perimeter = base + side1 + side2;
+                    const area = 0.5 * base * height;
+                    return { perimeter, area };
+                }
+            },
+            parallelogram: {
+                name: "متوازی‌الأضلاع",
+                icon: "▱",
+                inputs: [
+                    { id: "base", label: "قاعده (سانتی‌متر)", icon: "fas fa-ruler-horizontal" },
+                    { id: "side", label: "ضلع مجاور (سانتی‌متر)", icon: "fas fa-ruler" },
+                    { id: "height", label: "ارتفاع (سانتی‌متر)", icon: "fas fa-ruler-vertical" }
+                ],
+                calculate: (inputs) => {
+                    const base = parseFloat(inputs.base) || 0;
+                    const side = parseFloat(inputs.side) || 0;
+                    const height = parseFloat(inputs.height) || 0;
+                    const perimeter = 2 * (base + side);
+                    const area = base * height;
+                    return { perimeter, area };
+                }
+            },
+            trapezoid: {
+                name: "ذوزنقه",
+                icon: "⏢",
+                inputs: [
+                    { id: "base1", label: "قاعده بزرگ (سانتی‌متر)", icon: "fas fa-ruler-horizontal" },
+                    { id: "base2", label: "قاعده کوچک (سانتی‌متر)", icon: "fas fa-ruler" },
+                    { id: "side1", label: "ضلع اول (سانتی‌متر)", icon: "fas fa-ruler" },
+                    { id: "side2", label: "ضلع دوم (سانتی‌متر)", icon: "fas fa-ruler" },
+                    { id: "height", label: "ارتفاع (سانتی‌متر)", icon: "fas fa-ruler-vertical" }
+                ],
+                calculate: (inputs) => {
+                    const base1 = parseFloat(inputs.base1) || 0;
+                    const base2 = parseFloat(inputs.base2) || 0;
+                    const side1 = parseFloat(inputs.side1) || 0;
+                    const side2 = parseFloat(inputs.side2) || 0;
+                    const height = parseFloat(inputs.height) || 0;
+                    const perimeter = base1 + base2 + side1 + side2;
+                    const area = 0.5 * (base1 + base2) * height;
+                    return { perimeter, area };
+                }
+            }
+        };
+
+        // DOM Elements
+        const shapeSelector = document.getElementById('shapeSelector');
+        const shapeDiagram = document.getElementById('shapeDiagram');
+        const inputGroup = document.getElementById('inputGroup');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const perimeterResult = document.getElementById('perimeterResult');
+        const areaResult = document.getElementById('areaResult');
+        const themeToggle = document.getElementById('themeToggle');
+
+        // Current selected shape
+        let currentShape = 'square';
+
+        // Initialize the app
+        function initApp() {
+            // Add event listeners to shape buttons
+            document.querySelectorAll('.shape-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    document.querySelectorAll('.shape-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked button
+                    button.classList.add('active');
+                    
+                    // Update current shape
+                    currentShape = button.dataset.shape;
+                    
+                    // Update diagram
+                    shapeDiagram.textContent = shapes[currentShape].icon;
+                    
+                    // Update input fields
+                    updateInputFields();
+                });
+            });
+            
+            // Initial input fields update
+            updateInputFields();
+            
+            // Add event listener to calculate button
+            calculateBtn.addEventListener('click', calculateResults);
+            
+            // Theme toggle functionality
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-theme');
+                
+                if (document.body.classList.contains('dark-theme')) {
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                } else {
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                }
+            });
+        }
+
+        // Update input fields based on selected shape
+        function updateInputFields() {
+            const shape = shapes[currentShape];
+            inputGroup.innerHTML = '';
+            
+            shape.inputs.forEach(input => {
+                const inputField = document.createElement('div');
+                inputField.className = 'input-field';
+                inputField.innerHTML = `
+                    <label class="input-label">${input.label}</label>
+                    <div class="input-container">
+                        <i class="${input.icon}"></i>
+                        <input type="number" id="${input.id}Input" placeholder="${input.label}" min="0" step="0.01">
+                    </div>
+                `;
+                inputGroup.appendChild(inputField);
+            });
+        }
+
+        // Calculate results
+        function calculateResults() {
+            const shape = shapes[currentShape];
+            const inputs = {};
+            
+            // Get input values
+            shape.inputs.forEach(input => {
+                const inputElement = document.getElementById(`${input.id}Input`);
+                inputs[input.id] = inputElement.value;
+            });
+            
+            // Calculate results
+            const results = shape.calculate(inputs);
+            
+            // Display results
+            perimeterResult.textContent = results.perimeter.toFixed(2) + ' سانتی‌متر';
+            areaResult.textContent = results.area.toFixed(2) + ' سانتی‌متر²';
+        }
+
+        // Initialize the app when the page loads
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
